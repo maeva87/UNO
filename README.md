@@ -45,10 +45,72 @@ projet-uno/
     ├── game.html             ← Page de jeu
     ├── styles/
     │   └── main.css          ← Styles globaux
-    └── scripts/
-        ├── socket.js         ← Connexion Socket.io côté client
-        ├── lobby.js          ← Logique JS de la page lobby
-        └── game.js           ← Logique JS de la page de jeu
+    ├── scripts/
+    │   ├── socket.js         ← Connexion Socket.io côté client
+    │   ├── lobby.js          ← Logique JS de la page lobby
+    │   └── game.js           ← Logique JS de la page de jeu
+    └── assets/
+        └── UNO_cards/
+            ├── UNO_blue/
+            │   ├── 0-blue.png
+            │   ├── 1-blue.png
+            │   ├── 2-blue.png
+            │   ├── 3-blue.png
+            │   ├── 4-blue.png
+            │   ├── 5-blue.png
+            │   ├── 6-blue.png
+            │   ├── 7-blue.png
+            │   ├── 8-blue.png
+            │   ├── 9-blue.png
+            │   ├── draw2-blue.png
+            │   ├── reverse-blue.png
+            │   └── skip-blue.png
+            ├── UNO_yellow/
+            │   ├── 0-yellow.png
+            │   ├── 1-yellow.png
+            │   ├── 2-yellow.png
+            │   ├── 3-yellow.png
+            │   ├── 4-yellow.png
+            │   ├── 5-yellow.png
+            │   ├── 6-yellow.png
+            │   ├── 7-yellow.png
+            │   ├── 8-yellow.png
+            │   ├── 9-yellow.png
+            │   ├── draw2-yellow.png
+            │   ├── reverse-yellow.png
+            │   └── skip-yellow.png
+            ├── UNO_red/
+            │   ├── 0-red.png
+            │   ├── 1-red.png
+            │   ├── 2-red.png
+            │   ├── 3-red.png
+            │   ├── 4-red.png
+            │   ├── 5-red.png
+            │   ├── 6-red.png
+            │   ├── 7-red.png
+            │   ├── 8-red.png
+            │   ├── 9-red.png
+            │   ├── draw2-red.png
+            │   ├── reverse-red.png
+            │   └── skip-red.png
+            ├── UNO_green/
+            │   ├── 0-green.png
+            │   ├── 1-green.png
+            │   ├── 2-green.png
+            │   ├── 3-green.png
+            │   ├── 4-green.png
+            │   ├── 5-green.png
+            │   ├── 6-green.png
+            │   ├── 7-green.png
+            │   ├── 8-green.png
+            │   ├── 9-green.png
+            │   ├── draw2-green.png
+            │   ├── reverse-green.png
+            │   └── skip-green.png
+            └── UNO_others/
+                ├── back.png
+                ├── wild.png
+                └── wild-draw4.png
 ```
 
 ---
