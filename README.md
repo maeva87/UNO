@@ -3,6 +3,16 @@
 Jeu de UNO multijoueur en ligne, développé en JavaScript vanilla sans framework.  
 Projet réalisé dans le cadre d'un cours de développement web — rendu le 28 avril.
 
+## Sommaire
+
+- [Équipe](#équipe)
+- [Arborescence du projet](#arborescence-du-projet)
+- [Installation](#installation)
+- [Dépendances](#dépendances)
+- [Parcours utilisateur](#parcours-utilisateur)
+- [Règles du jeu](#règles-du-jeu)
+- [Organisation Git](#organisation-git)
+
 ---
 
 ## Équipe
