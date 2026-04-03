@@ -1,7 +1,7 @@
 # Projet UNO Web
 
 Jeu de UNO multijoueur en ligne, développé en JavaScript vanilla sans framework.  
-Projet réalisé dans le cadre d'un cours de développement web — rendu le 28 avril.
+Projet réalisé dans le cadre d'un cours de développement web.
 
 ## Sommaire
 
