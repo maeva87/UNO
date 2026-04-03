@@ -1,0 +1,29 @@
+{
+  "name": "uno-git",
+  "version": "1.0.0",
+  "description": "Jeu de UNO multijoueur en ligne, développé en JavaScript vanilla sans framework.  \r Projet réalisé dans le cadre d'un cours de développement web.",
+  "main": "db.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maeva87/UNO.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/maeva87/UNO/issues"
+  },
+  "homepage": "https://github.com/maeva87/UNO#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "socket.io": "^4.8.3",
+    "sqlite3": "^6.0.1"
+  }
+}
