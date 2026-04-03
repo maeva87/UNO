@@ -20,22 +20,22 @@ const io = new Server(server, {
 const authRoutes = require('./routes/auth');
 app.use('/api', authRoutes);
 
-// 6. Routes protégées
+// 6. Routes lobby (protégées)
 const authMiddleware = require('./middleware/auth');
-app.get('/api/lobbies', authMiddleware, (req, res) => {
-    res.json({ message: `Bienvenue ${req.user.username}` });
-});
+const lobbyRoutes = require('./routes/lobby');
+app.use('/api', authMiddleware, lobbyRoutes);
 
 // 7. Socket.IO — événements de jeu (personne B)
 io.on('connection', (socket) => {
     console.log('Joueur connecté :', socket.id);
 
     socket.on('disconnect', () => {
-    console.log('Joueur déconnecté :', socket.id);
+        console.log('Joueur déconnecté :', socket.id);
     });
 });
 
 // 8. Lancement
-server.listen(3000, () => {
-    console.log('Serveur lancé sur http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Serveur lancé sur http://localhost:${PORT}`);
 });
