@@ -1,7 +1,7 @@
 // 1. Imports
 const http    = require('http');
 const express = require('express');
-const { Server } = require('socket.io');
+const socket = require('./socket');
 
 // 2. Express
 const app = express();
@@ -12,9 +12,7 @@ app.use(express.static('./public'));
 const server = http.createServer(app);
 
 // 4. Socket.IO greffé sur le serveur HTTP
-const io = new Server(server, {
-    cors: { origin: '*' }
-});
+const io = socket.init(server);
 
 // 5. Routes auth (publiques)
 const authRoutes = require('./routes/auth');
