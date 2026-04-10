@@ -79,4 +79,28 @@ function dealCards(players) {
     };
 }
 
-module.exports = { createDeck, shuffleDeck, dealCards };
+function isValidMove(cardToPlay, topCard) {
+    // Les Wild et Wild+4 peuvent être jouées sur n'importe quelle carte
+    if (cardToPlay.value === 'wild' || cardToPlay.value === 'wild-draw4') {
+        return true;
+    }
+
+    // Si la topCard n'a pas de couleur (Wild jouée), il faut attendre que la couleur soit choisie
+    // Dans ce cas, la couleur est stockée différemment ou pas encore définie
+    // Pour l'instant, on suppose que topCard a toujours une couleur valide
+    
+    // Règle 1 : Même couleur
+    if (cardToPlay.color === topCard.color) {
+        return true;
+    }
+
+    // Règle 2 : Même valeur/symbole (chiffre ou carte spéciale)
+    if (cardToPlay.value === topCard.value) {
+        return true;
+    }
+
+    // Coup invalide
+    return false;
+}
+
+module.exports = { createDeck, shuffleDeck, dealCards, isValidMove };
