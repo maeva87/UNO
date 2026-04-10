@@ -103,4 +103,108 @@ function isValidMove(cardToPlay, topCard) {
     return false;
 }
 
-module.exports = { createDeck, shuffleDeck, dealCards, isValidMove };
+function applyCardEffect(card, gameState) {
+    // gameState contient : { currentPlayer, players, direction, pendingDraws, hands, drawPile }
+    // Retourne les modifications à appliquer
+    
+    const effect = {
+        skipNextTurn: false,
+        directionChanged: false,
+        pendingDraws: 0,
+        colorChosen: null,
+    };
+
+    switch (card.value) {
+        case 'draw2':
+            // +2 : Le joueur suivant pioche 2 cartes et passe
+            effect.pendingDraws = 2;
+            effect.skipNextTurn = true;
+            break;
+
+        case 'wild-draw4':
+            // +4 : Le joueur suivant pioche 4 cartes, passe, et on choisit une couleur
+            effect.pendingDraws = 4;
+            effect.skipNextTurn = true;
+            // La couleur sera choisie par le joueur en cours
+            break;
+
+        case 'reverse':
+            // Inversion : Change la direction
+            effect.directionChanged = true;
+            break;
+
+        case 'skip':
+            // Passer : Le joueur suivant passe son tour
+            effect.skipNextTurn = true;
+            break;
+
+        case 'wild':
+            // Joker : Le joueur choisit une couleur (à faire côté client)
+            // Ici on marque juste qu'il faut choisir une couleur
+            break;
+
+        default:
+            // Cartes normales : pas d'effet
+            break;
+    }
+
+    return effect;
+}
+
+function drawCards(playerId, numberOfCards, gameState) {
+    // Pioche numberOfCards cartes pour le joueur
+    const cardsDrawn = [];
+
+    for (let i = 0; i < numberOfCards; i++) {
+        if (gameState.drawPile.length === 0) {
+            // Réinitialiser la pioche avec la défausse (sauf la première carte)
+            if (gameState.discardPile.length > 1) {
+                const topCard = gameState.discardPile[gameState.discardPile.length - 1];
+                gameState.drawPile = gameState.discardPile.slice(0, -1);
+                gameState.drawPile = shuffleDeck(gameState.drawPile);
+                gameState.discardPile = [topCard];
+            } else {
+                // Pas assez de cartes (cas extrême)
+                break;
+            }
+        }
+        const card = gameState.drawPile.pop();
+        gameState.hands[playerId].push(card);
+        cardsDrawn.push(card);
+    }
+
+    return cardsDrawn;
+}
+
+function playCard(playerId, cardIndex, gameState, chosenColor = null) {
+    // Joue une carte de la main d'un joueur
+    // Retourne l'état mis à jour et les effets
+
+    const card = gameState.hands[playerId][cardIndex];
+
+    if (!isValidMove(card, gameState.topCard)) {
+        return { success: false, error: 'Coup invalide' };
+    }
+
+    // Retirer la carte de la main
+    gameState.hands[playerId].splice(cardIndex, 1);
+
+    // Ajouter à la défausse
+    gameState.discardPile.push(card);
+
+    // Mettre à jour la carte visible
+    let topCardToDisplay = card;
+    if (card.value === 'wild' && chosenColor) {
+        topCardToDisplay = { ...card, color: chosenColor };
+    } else if (card.value === 'wild-draw4' && chosenColor) {
+        topCardToDisplay = { ...card, color: chosenColor };
+    }
+    gameState.topCard = topCardToDisplay;
+
+    // Appliquer l'effet de la carte
+    const effect = applyCardEffect(card, gameState);
+
+    return { success: true, effect, cardPlayed: card };
+}
+
+module.exports = { createDeck, shuffleDeck, dealCards, isValidMove, applyCardEffect, drawCards, playCard };
