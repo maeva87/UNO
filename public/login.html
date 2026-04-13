@@ -1,29 +1,46 @@
-<html>
-<buttom onclick="document.getElementById('id01').style.display='block'">Login</buttom>
-<div id="id01" class="modal">
-    <span onclick="document.getElementById('id01').style.display='none'" class="close"
-        title="Close Modal">&times;></span>
-    <form class="modal-content animate" action="server.js">
-        <div class="imgcontainer">
-            <img src="logo_game/user_log.png" alt="Avatar" class="avatar">
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <h2>Login Page</h2>
+    <div class="container" id="container">
+        <div class="form-container sign-up container">
+            <form action="#"></form>
+            <h1>Create Account</h1>
+            <div class="imgcontainer">
+                <img src="assets/logo_game/user_log.png" alt="Avatar" class="avatar">
+            </div>
+            <span> or use your username for registration</span>
+            <input type="text" placeholder="Username" />
+            <input type="password" placeholder="Password">
+            <buttom>Sign Up</buttom>
+            </form>
         </div>
-        <div class="container">
-            <label for="uname"></labelb>Username</b></label>
-            <input type="text" placeholder="Enter your Username" name="uname" required>
-
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter your Password" name="psw" required>
-
-            <button type="submit">Login</button>
-            <label>
-                <input type="checkbox" checked="checked" name="remember"> Remember me
-            </label>
+        <div class="form-container sign-in-container">
+            <form action="#">
+                <h1>Sign Up</h1>
+                <div class="imgcontainer">
+                    <img src="assets/logo_game/user_log.png" alt="Avatar" class="avatar">
+                </div>
+                <span>or use your account</span>
+                <input type="text" placeholder="Username" />
+                <input type="password" placeholder="Password" />
+                <a href="#">Forgot your password?</a>
+                <button>Sign Up</button>
+            </form>
         </div>
-        <div class="container" style="background-color: #f1f1f1;">
-            <button type="buttom" onclick="document.getElementById('id01').style.display='none'"
-                class="cancelbtn">Cancel</button>
-            <span class="psw">Forget <a href="#">password?</a></span>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connect with us please login with your personal info</p>
+                    <button class="ghost" id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, NewUser!</h1>
+                    <p>Enter your personal details and start journey with us</p>
+                    <button class="ghost" id="signIn">Sign Up</button>
+                </div>
+            </div>
         </div>
-    </form>
+
 </html>

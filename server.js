@@ -32,9 +32,6 @@ io.on('connection', (socket) => {
     });
 });
 
-const lobbyRoutes = require('./routes/lobbies');
-app.use('/api/lobbies', authMiddleware, lobbyRoutes);
-
 // Lancement
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
