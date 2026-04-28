@@ -43,6 +43,7 @@ router.post('/create', (req, res) => {
 router.post('/join', (req, res) => {
     const { code } = req.body;
     const player_id = req.auth.userId;
+    console.log('Tentative rejoindre avec code:', code);
 
     db.get('SELECT * FROM lobbies WHERE code = ?', [code], (err, lobby) => {
         if (!lobby) return res.status(404).json({ error: 'Lobby introuvable' });
