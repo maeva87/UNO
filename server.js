@@ -12,7 +12,7 @@ app.use(express.static('./public'));
 const server = http.createServer(app);
 
 // Socket.IO greffé sur le serveur HTTP
-const io = socket.init(server);
+socket.init(server);
 
 // Routes auth (publiques)
 const authRoutes = require('./routes/auth');
@@ -23,17 +23,8 @@ const authMiddleware = require('./middleware/auth');
 const lobbyRoutes = require('./routes/lobby');
 app.use('/api', authMiddleware, lobbyRoutes);
 
-// Socket.IO — événements de jeu (personne B)
-io.on('connection', (socket) => {
-    console.log('Joueur connecté :', socket.id);
-
-    socket.on('disconnect', () => {
-        console.log('Joueur déconnecté :', socket.id);
-    });
-});
-
 // Lancement
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`Serveur lancé sur http://localhost:${PORT}`);
+    console.log(`🚀 Serveur lancé sur http://localhost:${PORT}`);
 });

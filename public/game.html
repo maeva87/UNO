@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UNO — Jeu</title>
+  <link rel="shortcut icon" href="assets/logo_game/UNO_Logo.svg.png" type="image/png"/>
+  <link rel="stylesheet" href="styles/main.css"/>
+</head>
+<body class="game-page">
+  <div class="navbar">
+    <div class="navbar-left">
+      <img src="assets/logo_game/UNO_Logo.svg.png" alt="UNO" height="40"/>
+    </div>
+    <div class="navbar-right">
+      <button id="leave-game-btn" class="btn btn-secondary">Quitter</button>
+    </div>
+  </div>
+
+  <div class="game-container">
+    <!-- Zone des joueurs (adversaires) -->
+    <div class="game-board">
+      <div class="other-players" id="other-players">
+        <!-- Dynamiquement rempli -->
+      </div>
+
+      <!-- Zone centrale (talon + défausse) -->
+      <div class="game-center">
+        <div class="discard-pile">
+          <div id="current-card" class="card card-discard">
+            <div class="card-inner">
+              <div class="card-front">
+                <span id="card-value">?</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="draw-pile">
+          <div id="draw-btn" class="card card-deck">
+            <span class="deck-count" id="deck-count">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info sur le joueur actuel -->
+      <div class="game-status">
+        <p id="current-player">C'est à <strong>...</strong> de jouer</p>
+        <p id="game-message"></p>
+      </div>
+    </div>
+
+    <!-- Mes cartes -->
+    <div class="my-hand">
+      <h3>Ma main</h3>
+      <div class="cards-hand" id="my-cards">
+        <!-- Dynamiquement rempli -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal avec les règles du UNO -->
+  <div id="rules-modal" class="modal hidden">
+    <div class="modal-content modal-large">
+      <h2>Règles du UNO</h2>
+      <div class="rules-content">
+        <p><strong>Objectif :</strong> Être le premier à vous débarrasser de toutes vos cartes.</p>
+        <p><strong>Cartes Spéciales :</strong></p>
+        <ul>
+          <li>+2 : Le joueur suivant pioche 2 cartes</li>
+          <li>Inverse : Change le sens de jeu</li>
+          <li>Passe : Le joueur suivant passe son tour</li>
+          <li>Joker : Changez la couleur</li>
+          <li>+4 : Le joueur suivant pioche 4 cartes ET change la couleur</li>
+        </ul>
+        <p><strong>Points :</strong> Cartes 0-9 valent leur numéro. +2, Inverse, Passe = 20 pts. Joker, +4 = 50 pts.</p>
+      </div>
+      <button class="btn btn-primary" onclick="document.getElementById('rules-modal').classList.add('hidden')">Compris !</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="scripts/socket.js"></script>
+  <script src="scripts/game.js"></script>
+</body>
+</html>
