@@ -1,26 +1,85 @@
 // ==================== LOBBY PAGE ====================
 
+// Vérification auth
 if (!checkAuth()) {
     throw new Error('Non authentifié');
 }
 
-const socket = initSocket();
-const usernameDisplay = document.getElementById('username-display');
-const logoutBtn = document.getElementById('logout-btn');
-const createLobbyBtn = document.getElementById('create-lobby-btn');
-const createModal = document.getElementById('create-modal');
+// Init socket
+initSocket();
+
+// Éléments du DOM
+const usernameDisplay  = document.getElementById('username-display');
+const logoutBtn        = document.getElementById('logout-btn');
+const createLobbyBtn   = document.getElementById('create-lobby-btn');
+const createModal      = document.getElementById('create-modal');
 const confirmCreateBtn = document.getElementById('confirm-create');
-const cancelCreateBtn = document.getElementById('cancel-create');
-const roomNameInput = document.getElementById('room-name');
+const cancelCreateBtn  = document.getElementById('cancel-create');
+const roomNameInput    = document.getElementById('room-name');
 const maxPlayersSelect = document.getElementById('max-players');
-const lobbiesGrid = document.getElementById('lobbies-grid');
+const lobbiesGrid      = document.getElementById('lobbies-grid');
+const joinCodeInput    = document.getElementById('join-code-input');
+const joinCodeBtn      = document.getElementById('join-code-btn');
 
 // Afficher l'username
 const username = localStorage.getItem('username');
 usernameDisplay.textContent = username || 'Utilisateur';
 
-// ========== EVENT LISTENERS ==========
+// ========== STYLE DU CHAMP CODE ==========
 
+const style = document.createElement('style');
+style.textContent = `
+    .join-by-code {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 24px;
+        align-items: center;
+    }
+    .join-by-code input {
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: 2px solid rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.1);
+        color: white;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        font-weight: 700;
+        width: 180px;
+    }
+    .join-by-code input::placeholder {
+        letter-spacing: 1px;
+        font-weight: 400;
+        text-transform: none;
+        opacity: 0.6;
+    }
+    .waiting-screen {
+        text-align: center;
+        padding: 40px;
+        color: white;
+    }
+    .waiting-screen h2 {
+        margin-bottom: 16px;
+    }
+    .waiting-players {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+    .waiting-player-badge {
+        background: rgba(255,255,255,0.15);
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-weight: 700;
+    }
+`;
+document.head.appendChild(style);
+
+// ========== ÉVÉNEMENTS ==========
+
+// Déconnexion
 logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
@@ -28,17 +87,42 @@ logoutBtn.addEventListener('click', () => {
     window.location.href = 'index.html';
 });
 
+// Ouvrir le modal de création
 createLobbyBtn.addEventListener('click', () => {
     createModal.classList.remove('hidden');
     roomNameInput.focus();
 });
 
+// Fermer le modal
 cancelCreateBtn.addEventListener('click', () => {
     createModal.classList.add('hidden');
 });
 
+// Mettre le code en majuscules automatiquement
+joinCodeInput.addEventListener('input', () => {
+    joinCodeInput.value = joinCodeInput.value.toUpperCase();
+});
+
+// Rejoindre via un code
+joinCodeBtn.addEventListener('click', async () => {
+    const code = joinCodeInput.value.trim().toUpperCase();
+
+    if (code.length !== 5) {
+        alert('Le code doit faire 5 caractères');
+        return;
+    }
+
+    await joinLobbyByCode(code);
+});
+
+// Rejoindre en appuyant sur Entrée
+joinCodeInput.addEventListener('keydown', async (e) => {
+    if (e.key === 'Enter') joinCodeBtn.click();
+});
+
+// Créer une salle
 confirmCreateBtn.addEventListener('click', async () => {
-    const name = roomNameInput.value.trim();
+    const name       = roomNameInput.value.trim();
     const maxPlayers = parseInt(maxPlayersSelect.value);
 
     if (!name) {
@@ -50,7 +134,7 @@ confirmCreateBtn.addEventListener('click', async () => {
         const res = await fetch('/api/lobbies/create', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type':  'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify({ name, max_players: maxPlayers })
@@ -63,8 +147,7 @@ confirmCreateBtn.addEventListener('click', async () => {
             return;
         }
 
-        // Rejoindre la salle créée
-        localStorage.setItem('currentLobbyId', data.id);
+        localStorage.setItem('currentLobbyId',   data.id);
         localStorage.setItem('currentLobbyCode', data.code);
         window.location.href = 'game.html';
     } catch (err) {
@@ -73,7 +156,7 @@ confirmCreateBtn.addEventListener('click', async () => {
     }
 });
 
-// ========== CHARGER LES SALLES ==========
+// ========== CHARGEMENT DES SALLES ==========
 
 async function loadLobbies() {
     try {
@@ -91,6 +174,7 @@ async function loadLobbies() {
     }
 }
 
+// Afficher les salles
 function displayLobbies(lobbies) {
     lobbiesGrid.innerHTML = '';
 
@@ -119,12 +203,13 @@ function displayLobbies(lobbies) {
     });
 }
 
+// Rejoindre via le bouton de la carte
 async function joinLobby(lobbyId, code) {
     try {
         const res = await fetch('/api/lobbies/join', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type':  'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify({ code })
@@ -137,7 +222,7 @@ async function joinLobby(lobbyId, code) {
             return;
         }
 
-        localStorage.setItem('currentLobbyId', lobbyId);
+        localStorage.setItem('currentLobbyId',   lobbyId);
         localStorage.setItem('currentLobbyCode', code);
         window.location.href = 'game.html';
     } catch (err) {
@@ -146,34 +231,61 @@ async function joinLobby(lobbyId, code) {
     }
 }
 
-// ========== CONNEXION SOCKET ==========
+// Rejoindre via un code saisi
+async function joinLobbyByCode(code) {
+    try {
+        const res = await fetch('/api/lobbies/join', {
+            method: 'POST',
+            headers: {
+                'Content-Type':  'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({ code })
+        });
 
-socket.on('connect', () => {
+        const data = await res.json();
+
+        if (!res.ok) {
+            alert('Erreur : ' + (data.error || 'Code invalide ou salle introuvable'));
+            return;
+        }
+
+        localStorage.setItem('currentLobbyId',   data.lobby.id);
+        localStorage.setItem('currentLobbyCode', code);
+        window.location.href = 'game.html';
+    } catch (err) {
+        console.error('Erreur rejoindre via code:', err);
+        alert('Erreur réseau');
+    }
+}
+
+// ========== SOCKET ==========
+
+getSocket().on('connect', () => {
     console.log('✓ Connecté au serveur');
     sendAuthToServer();
 });
 
-socket.on('lobby_updated', () => {
-    console.log('Lobby mis à jour');
+// Rafraîchir si un lobby change
+getSocket().on('lobby_updated', () => {
     loadLobbies();
 });
 
 // ========== INIT ==========
 
-// Charger les salles toutes les 3 secondes
 loadLobbies();
 setInterval(loadLobbies, 3000);
 
-// UTILITAIRES
+// ========== UTILITAIRES ==========
 
 function escapeHtml(text) {
     if (!text) return '';
     const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
+        '&':  '&amp;',
+        '<':  '&lt;',
+        '>':  '&gt;',
+        '"':  '&quot;',
+        "'":  '&#039;'
     };
     return text.replace(/[&<>"']/g, m => map[m]);
 }

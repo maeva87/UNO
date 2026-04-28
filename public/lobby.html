@@ -1,62 +1,67 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UNO — Lobby</title>
-  <link rel="shortcut icon" href="assets/logo_game/UNO_Logo.svg.png" type="image/png"/>
-  <link rel="stylesheet" href="styles/main.css"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>UNO — Lobby</title>
+    <link rel="shortcut icon" href="assets/logo_game/UNO_Logo.svg.png" type="image/png"/>
+    <link rel="stylesheet" href="styles/main.css"/>
 </head>
 <body class="lobby-page">
-  <div class="navbar">
-    <div class="navbar-left">
-      <img src="assets/logo_game/UNO_Logo.svg.png" alt="UNO" height="40"/>
-    </div>
-    <div class="navbar-right">
-      <span id="username-display">User</span>
-      <button id="logout-btn" class="btn btn-secondary">Déconnexion</button>
-    </div>
-  </div>
-
-  <div class="lobby-container">
-    <div class="lobby-header">
-      <h1>🎮 Salles de Jeu</h1>
-      <button id="create-lobby-btn" class="btn btn-primary">+ Créer une Salle</button>
-    </div>
-
-    <!-- Modal pour créer une salle -->
-    <div id="create-modal" class="modal hidden">
-      <div class="modal-content">
-        <h2>Créer une nouvelle salle</h2>
-        <div class="input-group">
-          <label>Nom de la salle :</label>
-          <input type="text" id="room-name" placeholder="Ma super salle" maxlength="30" />
+    <div class="navbar">
+        <div class="navbar-left">
+            <img src="assets/logo_game/UNO_Logo.svg.png" alt="UNO" height="40"/>
         </div>
-        <div class="input-group">
-          <label>Nombre max de joueurs :</label>
-          <select id="max-players">
-            <option value="2">2 joueurs</option>
-            <option value="3">3 joueurs</option>
-            <option value="4" selected>4 joueurs</option>
-          </select>
+        <div class="navbar-right">
+            <span id="username-display">User</span>
+            <button id="logout-btn" class="btn btn-secondary">Déconnexion</button>
         </div>
-        <div class="modal-buttons">
-          <button id="confirm-create" class="btn btn-primary">Créer</button>
-          <button id="cancel-create" class="btn btn-secondary">Annuler</button>
-        </div>
-      </div>
     </div>
 
-    <!-- Liste des lobbies -->
-    <div class="lobbies-list">
-      <div id="lobbies-grid" class="lobbies-grid">
-        <!-- Dynamiquement rempli par lobby.js -->
-      </div>
-    </div>
-  </div>
+    <div class="lobby-container">
+        <div class="lobby-header">
+            <h1>Salles de Jeu</h1>
+            <button id="create-lobby-btn" class="btn btn-primary">+ Créer une Salle</button>
+        </div>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="scripts/socket.js"></script>
-  <script src="scripts/lobby.js"></script>
+        <!-- Rejoindre via un code -->
+        <div class="join-by-code">
+            <input type="text" id="join-code-input" placeholder="Entrer un code de salle..." maxlength="5" />
+            <button id="join-code-btn" class="btn btn-secondary">Rejoindre</button>
+        </div>
+
+        <!-- Modal pour créer une salle -->
+        <div id="create-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Créer une nouvelle salle</h2>
+                <div class="input-group">
+                    <label>Nom de la salle :</label>
+                    <input type="text" id="room-name" placeholder="Ma super salle" maxlength="30" />
+                </div>
+                <div class="input-group">
+                    <label>Nombre max de joueurs :</label>
+                    <select id="max-players">
+                        <option value="2">2 joueurs</option>
+                        <option value="3">3 joueurs</option>
+                        <option value="4" selected>4 joueurs</option>
+                    </select>
+                </div>
+                <div class="modal-buttons">
+                    <button id="confirm-create" class="btn btn-primary">Créer</button>
+                    <button id="cancel-create" class="btn btn-secondary">Annuler</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liste des lobbies -->
+        <div class="lobbies-list">
+            <div id="lobbies-grid" class="lobbies-grid">
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="scripts/socket.js"></script>
+    <script src="scripts/lobby.js"></script>
 </body>
 </html>
