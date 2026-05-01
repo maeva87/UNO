@@ -2,7 +2,6 @@ const sqlite3 = require('sqlite3').verbose();
 
 const db = new sqlite3.Database('./uno.sqlite');
 
-    // Tables users
 db.serialize(() => {
     db.run(`
     CREATE TABLE IF NOT EXISTS users (
@@ -12,7 +11,6 @@ db.serialize(() => {
     )
     `);
 
-    // Tables lobbies
     db.run(`
     CREATE TABLE IF NOT EXISTS lobbies (
         id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -26,7 +24,6 @@ db.serialize(() => {
     )
     `);
 
-    // Table lobby_players
     db.run(`
     CREATE TABLE IF NOT EXISTS lobby_players (
         id        INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,7 +35,6 @@ db.serialize(() => {
     )
     `);
 
-    // Table scores
     db.run(`
     CREATE TABLE IF NOT EXISTS scores (
         id        INTEGER PRIMARY KEY AUTOINCREMENT,

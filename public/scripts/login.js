@@ -1,3 +1,5 @@
+'use strict';
+
 const container   = document.getElementById('container');
 const btnSignUp   = document.getElementById('signUp');
 const btnSignIn   = document.getElementById('signIn');
@@ -18,13 +20,8 @@ const siPassword  = document.getElementById('si-password');
 const siUserErr   = document.getElementById('si-username-err');
 const siPassErr   = document.getElementById('si-password-err');
 
-btnSignUp.addEventListener('click', () => {
-  container.classList.add('right-panel-active');
-});
-
-btnSignIn.addEventListener('click', () => {
-  container.classList.remove('right-panel-active');
-});
+btnSignUp.addEventListener('click', () => container.classList.add('right-panel-active'));
+btnSignIn.addEventListener('click', () => container.classList.remove('right-panel-active'));
 
 ppInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
@@ -34,9 +31,8 @@ ppInput.addEventListener('change', (e) => {
     showToast('Please select an image (JPG, PNG, etc.)', 'error');
     return;
   }
-
   if (file.size > 5 * 1024 * 1024) {
-    showToast("The image must be less than 5 MB.", 'error');
+    showToast('The image must be less than 5 MB.', 'error');
     return;
   }
 
@@ -47,28 +43,28 @@ ppInput.addEventListener('change', (e) => {
 
 document.querySelectorAll('.toggle-pw').forEach((btn) => {
   btn.addEventListener('click', () => {
-    const input = document.getElementById(btn.dataset.target);
+    const input   = document.getElementById(btn.dataset.target);
     const isHidden = input.type === 'password';
-    input.type = isHidden ? 'text' : 'password';
+    input.type    = isHidden ? 'text' : 'password';
     btn.textContent = isHidden ? '🙈' : '👁';
   });
 });
 
 const STRENGTH_LEVELS = [
-  { label: 'Short',  color: '#E63946', width: '15%'  },
-  { label: 'Low',      color: '#f4a261', width: '35%'  },
-  { label: 'Medium',       color: '#e9c46a', width: '60%'  },
-  { label: 'Strengh',        color: '#2a9d5c', width: '85%'  },
-  { label: 'Excalibur !', color: '#1d8a4e', width: '100%' },
+  { label: 'Short',      color: '#E63946', width: '15%'  },
+  { label: 'Low',        color: '#f4a261', width: '35%'  },
+  { label: 'Medium',     color: '#e9c46a', width: '60%'  },
+  { label: 'Strong',     color: '#2a9d5c', width: '85%'  },
+  { label: 'Excalibur!', color: '#1d8a4e', width: '100%' },
 ];
 
 function getPasswordScore(value) {
   let score = 0;
-  if (value.length >= 6)                      score++;
-  if (value.length >= 12)                     score++;
+  if (value.length >= 6)                           score++;
+  if (value.length >= 12)                          score++;
   if (/[a-z]/.test(value) && /[A-Z]/.test(value)) score++;
-  if (/[0-9]/.test(value))                    score++;
-  if (/[$#@!%&*?^~\-_=+]/.test(value))       score++;
+  if (/[0-9]/.test(value))                         score++;
+  if (/[$#@!%&*?^~\-_=+]/.test(value))            score++;
   return Math.min(score, STRENGTH_LEVELS.length - 1);
 }
 
@@ -76,8 +72,8 @@ suPassword.addEventListener('input', () => {
   const val = suPassword.value;
 
   if (!val) {
-    strengthBar.style.width    = '0%';
-    strengthLbl.textContent    = '';
+    strengthBar.style.width  = '0%';
+    strengthLbl.textContent  = '';
     return;
   }
 
@@ -96,10 +92,10 @@ function validateUsername(val) {
 }
 
 function validatePassword(val) {
-  if (val.length < 6)                         return 'At least 6 characters.';
-  if (!/[a-zA-Z]/.test(val))                 return 'Must contain at least one letter.';
-  if (!/[0-9]/.test(val))                    return 'Must contain at least one digit.';
-  if (!/[$#@!%&*?^~\-_=+]/.test(val))       return 'Must contain a special character ($, #, @...).';
+  if (val.length < 6)                        return 'At least 6 characters.';
+  if (!/[a-zA-Z]/.test(val))                return 'Must contain at least one letter.';
+  if (!/[0-9]/.test(val))                   return 'Must contain at least one digit.';
+  if (!/[$#@!%&*?^~\-_=+]/.test(val))      return 'Must contain a special character ($, #, @...).';
   return null;
 }
 
@@ -116,25 +112,22 @@ function setFieldState(input, errorEl, errorMsg) {
   return !errorMsg;
 }
 
-suUsername.addEventListener('input', () =>
-  setFieldState(suUsername, suUserErr, validateUsername(suUsername.value))
-);
-suPassword.addEventListener('input', () =>
-  setFieldState(suPassword, suPassErr, validatePassword(suPassword.value))
-);
-siUsername.addEventListener('input', () =>
-  setFieldState(siUsername, siUserErr, validateUsername(siUsername.value))
-);
-siPassword.addEventListener('input', () =>
-  setFieldState(siPassword, siPassErr, validatePassword(siPassword.value))
-);
+suUsername.addEventListener('input', () => setFieldState(suUsername, suUserErr, validateUsername(suUsername.value)));
+suPassword.addEventListener('input', () => setFieldState(suPassword, suPassErr, validatePassword(suPassword.value)));
+siUsername.addEventListener('input', () => setFieldState(siUsername, siUserErr, validateUsername(siUsername.value)));
+siPassword.addEventListener('input', () => setFieldState(siPassword, siPassErr, validatePassword(siPassword.value)));
+
+function storeAuthData(data) {
+  localStorage.setItem('token',    data.token);     
+  localStorage.setItem('userId',   data.userId);    
+  localStorage.setItem('username', data.username);  
+}
 
 signupForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const usernameOK = setFieldState(suUsername, suUserErr, validateUsername(suUsername.value));
   const passwordOK = setFieldState(suPassword, suPassErr, validatePassword(suPassword.value));
-
   if (!usernameOK || !passwordOK) return;
 
   const payload = {
@@ -155,13 +148,15 @@ signupForm.addEventListener('submit', async (e) => {
       showToast(data.error || 'An error occurred whilst creating the account.', 'error');
       return;
     }
-    localStorage.setItem('token',    data.token);
-    localStorage.setItem('userId',   data.userId);
-    localStorage.setItem('username', payload.username);
-    showToast('Account created! Welcomee 🎉', 'success');
+
+    
+    storeAuthData(data);
+
+    showToast('Account created! Welcome 🎉', 'success');
     setTimeout(() => { window.location.href = 'lobby.html'; }, 1200);
+
   } catch (err) {
-    console.error('[Sign Up] Network error :', err);
+    console.error('[Sign Up] Network error:', err);
     showToast('Unable to contact the server.', 'error');
   }
 });
@@ -171,7 +166,6 @@ signinForm.addEventListener('submit', async (e) => {
 
   const usernameOK = setFieldState(siUsername, siUserErr, validateUsername(siUsername.value));
   const passwordOK = setFieldState(siPassword, siPassErr, validatePassword(siPassword.value));
-
   if (!usernameOK || !passwordOK) return;
 
   const payload = {
@@ -189,16 +183,19 @@ signinForm.addEventListener('submit', async (e) => {
     const data = await res.json();
 
     if (!res.ok) {
-      showToast(data.error || 'Nice to see you again.', 'error');
+      
+      showToast(data.error || 'Incorrect username or password.', 'error');
       return;
     }
-    localStorage.setItem('token',    data.token);
-    localStorage.setItem('userId',   data.userId);
-    localStorage.setItem('username', data.username);
-    showToast(`Nice to see you, ${data.username} ! 🃏`, 'success');
+
+    
+    storeAuthData(data);
+
+    showToast(`Nice to see you, ${data.username}! 🃏`, 'success');
     setTimeout(() => { window.location.href = 'lobby.html'; }, 1200);
+
   } catch (err) {
-    console.error('[Sign In] Network error :', err);
+    console.error('[Sign In] Network error:', err);
     showToast('Unable to contact the server.', 'error');
   }
 });
@@ -207,7 +204,7 @@ function showToast(message, type = 'info') {
   document.querySelector('.toast')?.remove();
 
   const toast = document.createElement('div');
-  toast.className = 'toast';
+  toast.className   = 'toast';
   toast.textContent = message;
 
   const colors = { success: '#2a9d5c', error: '#E63946', info: '#457B9D' };
@@ -238,6 +235,7 @@ function showToast(message, type = 'info') {
     `;
     document.head.appendChild(s);
   }
+
   document.body.appendChild(toast);
   setTimeout(() => {
     toast.style.animation = 'toastOut .3s ease forwards';
